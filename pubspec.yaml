@@ -1,9 +1,8 @@
 name: flutter_forDev
-description: A new Flutter project.
+description: enquetes
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-# ThoPlistKeyReference/Articles/CoreFoundationKeys.html
 version: 1.0.0+1
 
 environment:
@@ -17,6 +16,9 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  test:
+  mockito:
+  faker:
 
 flutter:
   uses-material-design: true
