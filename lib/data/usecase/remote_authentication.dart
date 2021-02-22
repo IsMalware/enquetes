@@ -17,7 +17,22 @@ class RemoteAuthentication {
     await httpClient.request(
       url: url,
       method: 'post',
-      body: params.toMap(),
+      body: RemoteAuthenticationParams.fromDomain(params).toJson(),
     );
   }
+}
+
+class RemoteAuthenticationParams {
+  final String email;
+  final String password;
+
+  const RemoteAuthenticationParams({
+    @required this.email,
+    @required this.password,
+  });
+
+  factory RemoteAuthenticationParams.fromDomain(AuthenticationParams params) =>
+      RemoteAuthenticationParams(email: params.email, password: params.secret);
+
+  Map toJson() => {'email': this.email, 'password': this.password};
 }
