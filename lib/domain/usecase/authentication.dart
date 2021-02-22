@@ -14,4 +14,6 @@ class AuthenticationParams {
     @required this.email,
     @required this.secret,
   });
+
+  Map toMap() => {'email': this.email, 'password': this.secret};
 }
