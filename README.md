@@ -1,0 +1,1 @@
+Este repositório contém exemplos de BDD, TDD e SOLID.
