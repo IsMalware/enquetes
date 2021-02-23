@@ -83,5 +83,13 @@ void main() {
 
       expect(response, null);
     });
+
+    test('Deve chamar post e retornar BadRequestError se 400', () async {
+      mockResponse(400);
+
+      final future = sut.request(url: url, method: HttpMethod.post);
+
+      expect(future, throwsA(HttpError.badRequest));
+    });
   });
 }

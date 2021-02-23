@@ -26,11 +26,7 @@ class HttpAdapter  implements HttpClient {
       case HttpMethod.post:
         final response = await client.post(url, headers: headers, body: jsonBody);
 
-        if(response.statusCode == 200){
-          return response.body.isEmpty ? null : jsonDecode(response.body);
-        } else {
-          return null;
-        }
+        return _hendleResponse(response);
 
         break;
       case HttpMethod.get:
@@ -40,6 +36,27 @@ class HttpAdapter  implements HttpClient {
       case HttpMethod.delete:
         break;
     }
+  }
+
+  Map _hendleResponse(Response response) {
+    if(response.statusCode == 200){
+      return response.body.isEmpty ? null : jsonDecode(response.body);
+    } else if (response.statusCode == 204) {
+      return null;
+    }
+    
+    const httpError = <int, HttpError> {
+      204: null,
+      400: HttpError.badRequest,
+      401: HttpError.unauthorized,
+      403: HttpError.forbidden,
+      404: HttpError.notFound,
+      500: HttpError.serverError,
+    };
+
+    throw httpError.containsKey(response.statusCode)
+      ? httpError[response.statusCode]
+      : httpError[500];
   }
 
 }
