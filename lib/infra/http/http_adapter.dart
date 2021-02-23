@@ -25,22 +25,28 @@ class HttpAdapter  implements HttpClient {
 
     switch (method) {
       case HttpMethod.post:
+        
         final response = await client.post(url, headers: headers, body: jsonBody);
         return _hendleResponse(response);
 
         break;
-      case HttpMethod.get:
-        return <dynamic, dynamic>{};
-        break;
       case HttpMethod.put:
-        return <dynamic, dynamic>{};
+        
+        final response = await client.put(url, headers: headers, body: jsonBody);
+        return _hendleResponse(response);
+
         break;
       case HttpMethod.delete:
-        return <dynamic, dynamic>{};
-        break;
 
+        final response = await client.delete(url, headers: headers);
+        return _hendleResponse(response);
+      
+        break;
       default:
-        throw 'HTTP METHOD ERROR: Invalid Method';
+        
+        final response = await client.get(url, headers: headers);
+        return _hendleResponse(response);
+
         break;
     }
   }
@@ -53,7 +59,6 @@ class HttpAdapter  implements HttpClient {
     }
     
     const httpError = <int, HttpError> {
-      204: null,
       400: HttpError.badRequest,
       401: HttpError.unauthorized,
       403: HttpError.forbidden,
