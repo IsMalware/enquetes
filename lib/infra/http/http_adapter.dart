@@ -30,6 +30,12 @@ class HttpAdapter  implements HttpClient {
         return _hendleResponse(response);
 
         break;
+      case HttpMethod.get:
+
+        final response = await client.get(url, headers: headers);
+        return _hendleResponse(response);
+        
+        break;
       case HttpMethod.put:
         
         final response = await client.put(url, headers: headers, body: jsonBody);
@@ -43,10 +49,7 @@ class HttpAdapter  implements HttpClient {
       
         break;
       default:
-        
-        final response = await client.get(url, headers: headers);
-        return _hendleResponse(response);
-
+        throw HttpError.serverError;
         break;
     }
   }

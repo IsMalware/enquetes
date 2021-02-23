@@ -19,6 +19,8 @@ void main() {
     url = faker.internet.httpUrl();
   });
 
+  group('compartilhado', () {});
+
   group('post', () {
 
     PostExpectation mockRequest() => when(
