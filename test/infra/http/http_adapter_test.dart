@@ -1,41 +1,10 @@
-import 'dart:convert';
-
 import 'package:faker/faker.dart';
 import 'package:http/http.dart';
-import 'package:meta/meta.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import 'package:flutter_forDev/data/http/http.dart';
-
-class HttpAdapter {
-  final Client client;
-
-  const HttpAdapter(this.client);
-
-  Future<void> request({
-    @required String url,
-    @required HttpMethod method,
-    Map body
-  }) async {
-    final headers = {
-      'content-type': 'application/json',
-      'accept': 'application/json',
-    };
-    final jsonBody = body != null ? jsonEncode(body) : null;
-
-    switch (method) {
-      case HttpMethod.post:
-        client.post(
-          url,
-          headers: headers,
-          body: jsonBody,
-        );
-        break;
-      default:
-    }
-  }
-}
+import 'package:flutter_forDev/infra/http/http.dart';
 
 class ClientSpy extends Mock implements Client {}
 
@@ -51,12 +20,21 @@ void main() {
   });
 
   group('post', () {
+
+    PostExpectation mockRequest() => when(
+      client.post(any, body: anyNamed('body'), headers: anyNamed('headers'))
+    );
+
+    void mockResponse(int statusCode, {String body: '{"any_key":"any_value"}'}) {
+      mockRequest().thenAnswer((_) async => Response(body, statusCode));
+    }
+
+    setUp(() {
+      mockResponse(200);
+    });
+
     test('Deve chamar post com os valores corretos', () async {
-      await sut.request(
-        url: url,
-        method: HttpMethod.post,
-        body: {'any_key': 'any_value'}
-      );
+      await sut.request(url: url, method: HttpMethod.post, body: {'any_key': 'any_value'});
 
       verify(client.post(
         url,
@@ -69,15 +47,41 @@ void main() {
     });
 
     test('Deve chamar post sem o body', () async {
-      await sut.request(
-        url: url,
-        method: HttpMethod.post,
-      );
+      await sut.request(url: url, method: HttpMethod.post);
 
       verify(client.post(
         any,
         headers: anyNamed('headers'),
       ));
+    });
+
+    test('Deve chamar post e retornar 200 com dados', () async {
+      final response = await sut.request(url: url, method: HttpMethod.post);
+
+      expect(response, {'any_key': 'any_value'});
+    });
+
+    test('Deve chamar post e retornar nulo se 200 sem dados', () async {
+      mockResponse(200, body: '');
+      final response = await sut.request(url: url, method: HttpMethod.post);
+
+      expect(response, null);
+    });
+
+    test('Deve chamar post e retornar nulo se 204', () async {
+      mockResponse(204, body: '');
+
+      final response = await sut.request(url: url, method: HttpMethod.post);
+
+      expect(response, null);
+    });
+
+    test('Deve chamar post e retornar nulo se 204 com dados', () async {
+      mockResponse(204);
+
+      final response = await sut.request(url: url, method: HttpMethod.post);
+
+      expect(response, null);
     });
   });
 }
