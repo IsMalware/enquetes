@@ -22,12 +22,14 @@ class HttpAdapter {
       'content-type': 'application/json',
       'accept': 'application/json',
     };
+    final jsonBody = body != null ? jsonEncode(body) : null;
+
     switch (method) {
       case HttpMethod.post:
         client.post(
           url,
           headers: headers,
-          body: jsonEncode(body),
+          body: jsonBody,
         );
         break;
       default:
@@ -38,17 +40,17 @@ class HttpAdapter {
 class ClientSpy extends Mock implements Client {}
 
 void main() {
+  HttpAdapter sut;
+  ClientSpy client;
+  String url;
+
+  setUp(() {
+    client = ClientSpy();
+    sut = HttpAdapter(client);
+    url = faker.internet.httpUrl();
+  });
+
   group('post', () {
-    HttpAdapter sut;
-    ClientSpy client;
-    String url;
-
-    setUp(() {
-      client = ClientSpy();
-      sut = HttpAdapter(client);
-      url = faker.internet.httpUrl();
-    });
-
     test('Deve chamar post com os valores corretos', () async {
       await sut.request(
         url: url,
@@ -63,6 +65,18 @@ void main() {
           'accept': 'application/json',
         },
         body: '{"any_key":"any_value"}',
+      ));
+    });
+
+    test('Deve chamar post sem o body', () async {
+      await sut.request(
+        url: url,
+        method: HttpMethod.post,
+      );
+
+      verify(client.post(
+        any,
+        headers: anyNamed('headers'),
       ));
     });
   });
