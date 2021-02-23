@@ -20,20 +20,27 @@ class HttpAdapter  implements HttpClient {
       'content-type': 'application/json',
       'accept': 'application/json',
     };
+
     final jsonBody = body != null ? jsonEncode(body) : null;
 
     switch (method) {
       case HttpMethod.post:
         final response = await client.post(url, headers: headers, body: jsonBody);
-
         return _hendleResponse(response);
 
         break;
       case HttpMethod.get:
+        return <dynamic, dynamic>{};
         break;
       case HttpMethod.put:
+        return <dynamic, dynamic>{};
         break;
       case HttpMethod.delete:
+        return <dynamic, dynamic>{};
+        break;
+
+      default:
+        throw 'HTTP METHOD ERROR: Invalid Method';
         break;
     }
   }

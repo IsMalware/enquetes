@@ -123,5 +123,13 @@ void main() {
 
       expect(future, throwsA(HttpError.serverError));
     });
+
+    test('Deve chamar post e retornar ServerError para qualquer outro status', () async {
+      mockResponse(604);
+
+      final future = sut.request(url: url, method: HttpMethod.post);
+
+      expect(future, throwsA(HttpError.serverError));
+    });
   });
 }
