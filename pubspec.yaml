@@ -1,8 +1,6 @@
 name: flutter_forDev
 description: enquetes
 
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-
 version: 1.0.0+1
 
 environment:
@@ -16,6 +14,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons:
   test:
   mockito:
   faker:
@@ -32,3 +31,11 @@ flutter:
   #       - asset: fonts/Schyler-Regular.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
+
+flutter_icons:
+  ios: true
+  android: true
+  image_path_android: lib/ui/assets/icon/android.png
+  image_path_ios: lib/ui/assets/icon/ios.png
+  adaptive_icon_background: lib/ui/assets/icon/background.png
+  adaptive_icon_foreground: lib/ui/assets/icon/foreground.png
