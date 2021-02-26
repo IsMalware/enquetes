@@ -23,35 +23,31 @@ class HttpAdapter  implements HttpClient {
 
     final jsonBody = body != null ? jsonEncode(body) : null;
 
-    switch (method) {
-      case HttpMethod.post:
-        
-        final response = await client.post(url, headers: headers, body: jsonBody);
-        return _hendleResponse(response);
+    Response response = Response('', 500);
 
-        break;
-      case HttpMethod.get:
-
-        final response = await client.get(url, headers: headers);
-        return _hendleResponse(response);
-        
-        break;
-      case HttpMethod.put:
-        
-        final response = await client.put(url, headers: headers, body: jsonBody);
-        return _hendleResponse(response);
-
-        break;
-      case HttpMethod.delete:
-
-        final response = await client.delete(url, headers: headers);
-        return _hendleResponse(response);
-      
-        break;
-      default:
-        throw HttpError.serverError;
-        break;
+    try {
+      switch (method) {
+        case HttpMethod.post:
+          response = await client.post(url, headers: headers, body: jsonBody);
+          break;
+        case HttpMethod.get:
+          response = await client.get(url, headers: headers);
+          break;
+        case HttpMethod.put:
+          response = await client.put(url, headers: headers, body: jsonBody);
+          break;
+        case HttpMethod.delete:
+          response = await client.delete(url, headers: headers);
+          break;
+        default:
+          throw HttpError.serverError;
+          break;
+      }
+    } catch (e) {
+      throw HttpError.serverError;
     }
+
+    return _hendleResponse(response);
   }
 
   Map _hendleResponse(Response response) {

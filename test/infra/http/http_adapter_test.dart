@@ -29,6 +29,10 @@ void main() {
       mockRequest().thenAnswer((_) async => Response(body, statusCode));
     }
 
+    void mockError() {
+      mockRequest().thenThrow(Exception());
+    }
+
     setUp(() {
       mockResponse(200);
     });
@@ -126,6 +130,14 @@ void main() {
 
     test('Deve chamar post e retornar ServerError para qualquer outro status', () async {
       mockResponse(604);
+
+      final future = sut.request(url: url, method: HttpMethod.post);
+
+      expect(future, throwsA(HttpError.serverError));
+    });
+
+    test('Deve chamar post e retornar ServerError em caso de uma exceção', () async {
+      mockError();
 
       final future = sut.request(url: url, method: HttpMethod.post);
 
