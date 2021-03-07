@@ -1,4 +1,4 @@
-name: flutter_forDev
+name: flutter_fordev
 description: enquetes
 
 version: 1.0.0+1
@@ -9,6 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  http:
   cupertino_icons: ^1.0.0
 
 dev_dependencies:
