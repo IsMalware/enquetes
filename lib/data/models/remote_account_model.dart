@@ -12,7 +12,7 @@ class RemoteAccountModel {
   });
 
   factory RemoteAccountModel.fromJson(Map json) {
-    assert(json.containsKey('accessToken'), throw HttpError.invalidData);
+    if(json.containsKey('accessToken') throw HttpError.invalidData);
 
     return RemoteAccountModel(accessToken: json['accessToken']);
   }
